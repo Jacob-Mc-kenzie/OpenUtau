@@ -41,7 +41,7 @@ namespace OpenUtau.UI
             this.Height = Core.Util.Preferences.Default.MainHeight;
             this.WindowState = Core.Util.Preferences.Default.MainMaximized ? WindowState.Maximized : WindowState.Normal;
 
-            ThemeManager.LoadTheme(); // TODO : move to program entry point
+            //ThemeManager.LoadTheme(); // TODO : move to program entry point
 
             progVM = this.Resources["progVM"] as ProgressBarViewModel;
             progVM.Subscribe(DocManager.Inst);
@@ -467,6 +467,9 @@ namespace OpenUtau.UI
             w.ShowDialog();
         }
 
+        private void MenuExport_Click(object sender, RoutedEventArgs e) {
+            PlaybackManager.Inst.ExportAudio();
+        }
         # endregion
 
         // Disable system menu and main menu
@@ -641,9 +644,29 @@ namespace OpenUtau.UI
 
         private void bpmText_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // TODO: set bpm
+            var w = new Dialogs.TempoDialog() { Owner = this };
+            w.ShowDialog();
+            trackVM.BPM = DocManager.Inst.Project.BPM;
+            trackVM.MarkUpdate();
         }
 
-        # endregion
+        private void SeekHomeButton_Click(object sender, RoutedEventArgs e) {
+            try {
+                DocManager.Inst.ExecuteCmd(new SetPlayPosTickNotification(DocManager.Inst.Project.Parts[0].PosTick = 0));
+                trackVM.UpdatePlayPosMarker();
+                trackVM.MarkUpdate();
+                PlaybackManager.Inst.StopPlayback();
+            } catch { }
+        }
+
+        private void SeekEndButton_Click(object sender, RoutedEventArgs e) {
+            try{
+                DocManager.Inst.ExecuteCmd(new SetPlayPosTickNotification(DocManager.Inst.Project.Parts[0].EndTick));
+            } catch {
+
+            }
+        }
+
+        #endregion
     }
 }

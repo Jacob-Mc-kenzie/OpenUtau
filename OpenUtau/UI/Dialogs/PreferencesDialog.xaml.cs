@@ -23,6 +23,7 @@ namespace OpenUtau.UI.Dialogs {
             pathsItem.IsSelected = true;
             UpdateSingerPaths();
             UpdateEngines();
+            //UpdateThemes();
         }
 
         private Grid SelectedGrid {

@@ -1,0 +1,27 @@
+﻿<Window x:Class="OpenUtau.UI.Dialogs.TempoDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OpenUtau.UI.Dialogs"
+        xmlns:localvm="clr-namespace:OpenUtau.UI.Models"
+        mc:Ignorable="d"
+        Title="Tempo" Height="101.081" Width="208.947" ResizeMode="NoResize">
+    <Window.Resources>
+        <localvm:TracksViewModel x:Key="tracksVM"/>
+        <localvm:ProgressBarViewModel x:Key="progVM"/>
+        <BindingGroup x:Key="BindingGroup1"/>
+    </Window.Resources>
+    <Grid Margin="0,0,2,-6" Height="96" VerticalAlignment="Top">
+        <TextBlock Margin="7,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            Tempo:
+        </TextBlock>
+        <TextBox Name="BPM" Text="{Binding BPM, Mode=OneTime, Source={StaticResource tracksVM}}" Margin="50,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="120" KeyDown="Confirm_KeyDown"/>
+        <Button Name="Confirm" Margin="50,41,0,0" Click="Confirm_Click" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54">
+            Confirm
+        </Button>
+        <Button Margin="124,41,0,0" IsCancel="True" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="46">
+            Cancel
+        </Button>
+    </Grid>
+</Window>

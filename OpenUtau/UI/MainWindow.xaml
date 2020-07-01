@@ -37,6 +37,7 @@
                     <MenuItem Header="1.vsqx"/>
                     <MenuItem Header="2.vsqx"/>
                 </MenuItem>
+                <MenuItem Header="{StaticResource menu.file.export}" Click="MenuExport_Click"/>
                 <MenuItem Header="{StaticResource menu.file.exit}" InputGestureText="Alt+F4" Click="MenuExit_Click"/>
             </MenuItem>
             <MenuItem Header="{StaticResource menu.edit}">
@@ -65,7 +66,7 @@
             </Grid.ColumnDefinitions>
             <Grid x:Name="playbackGrid" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="40">
                 <Grid x:Name="bpmGrid" Height="20" Width="64" HorizontalAlignment="Left" Margin="10,0,0,0">
-                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="LightGray"/>
+                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="LightGray" Background="White"/>
                     <TextBlock x:Name="bpmText" FontFamily="GlobalMonospace.CompositeFont"
                                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" Margin="0,1,0,0"
                                MouseLeftButtonDown="bpmText_MouseLeftButtonDown">
@@ -79,19 +80,22 @@
                     </TextBlock>
                 </Grid>
                 <Grid x:Name="playbackIndicatorGrid" Height="20" Width="64" HorizontalAlignment="Right" Margin="0,0,10,0">
-                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="LightGray"/>
+                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="LightGray" Background="White"/>
                     <TextBlock x:Name="playPosTime" FontFamily="GlobalMonospace.CompositeFont"
                                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="11" Margin="0,1,0,0"
                                Text="{Binding Path=PlayPosTime, Source={StaticResource tracksVM}, StringFormat={}{0:mm\\:ss\\.fff}}"/>
                 </Grid>
                 <Grid x:Name="playbackButtonGrid" Height="20" Width="88" HorizontalAlignment="Left" Margin="84,0,0,0">
-                    <Button x:Name="seekHomeButton" Style="{StaticResource SeekHomeButtonStyle}" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="LightGray" Background="White"/>
+                    <Button x:Name="seekHomeButton" Style="{StaticResource SeekHomeButtonStyle}" Margin="4,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Click="SeekHomeButton_Click"/>
                     <Button x:Name="playButton" Style="{StaticResource PlayButtonStyle}" Margin="24,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
                             Click="playButton_Click"/>
                     <Button x:Name="pauseButton" Style="{StaticResource PauseButtonStyle}" Margin="44,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
                             Click="pauseButton_Click"/>
-                    <Button x:Name="seekEndButton" Style="{StaticResource SeekEndButtonStyle}" Margin="64,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <Border CornerRadius="4" BorderThickness="1" BorderBrush="LightGray"/>
+                    <Button x:Name="seekEndButton" Style="{StaticResource SeekEndButtonStyle}" Margin="64,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Click="SeekEndButton_Click"/>
+                    
                 </Grid>
             </Grid>
             <Grid x:Name="HeaderGrid" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,40,0,0">

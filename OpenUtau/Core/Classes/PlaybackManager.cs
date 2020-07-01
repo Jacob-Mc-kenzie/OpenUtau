@@ -15,7 +15,8 @@ namespace OpenUtau.Core
     class PlaybackManager : ICmdSubscriber
     {
         private WaveOut outDevice;
-
+        private bool Export = false;
+        private bool firstCheck = true;
         private PlaybackManager() { this.Subscribe(DocManager.Inst); }
 
         private static PlaybackManager _s;
@@ -32,6 +33,7 @@ namespace OpenUtau.Core
 
         public void Play(UProject project)
         {
+            Export = false;
             if (pendingParts > 0) return;
             else if (outDevice != null)
             {
@@ -86,7 +88,14 @@ namespace OpenUtau.Core
                 }
                 pendingParts--;
             }
-            if (pendingParts == 0) StartPlayback();
+            if (pendingParts == 0) {
+                if (!Export) {
+                    StartPlayback();
+                } else {
+                    ExportAudio();
+                }
+            }
+                
         }
 
         int pendingParts = 0;
@@ -126,7 +135,9 @@ namespace OpenUtau.Core
                 }
             }
 
-            if (pendingParts == 0) StartPlayback();
+            if (pendingParts == 0) {
+                StartPlayback();
+            }
         }
 
         public void UpdatePlayPos()
@@ -144,6 +155,19 @@ namespace OpenUtau.Core
             return (db == -24) ? 0 : (float)((db < -16) ? MusicMath.DecibelToLinear(db * 2 + 16) : MusicMath.DecibelToLinear(db));
         }
 
+        public void ExportAudio() {
+            Export = true;
+            if (firstCheck) {
+                BuildAudio(DocManager.Inst.Project);
+                firstCheck = false;
+            } else if (pendingParts == 0) {
+                masterMix = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
+                foreach (var source in trackSources)
+                    masterMix.AddMixerInput(source);
+                WaveFileWriter.CreateWaveFile("Export.wav", masterMix.ToWaveProvider());
+            }
+        }
+        
         # region ICmdSubscriber
 
         public void Subscribe(ICmdPublisher publisher) { if (publisher != null) publisher.Subscribe(this); }

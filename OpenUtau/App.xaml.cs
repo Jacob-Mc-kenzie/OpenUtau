@@ -17,6 +17,7 @@ namespace OpenUtau {
         private App() {
             InitializeComponent();
             SelectCulture(CultureInfo.InstalledUICulture.Name);
+            UI.ThemeManager.LoadTheme();
         }
 
         public static void SelectCulture(string culture) {

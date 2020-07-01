@@ -50,6 +50,7 @@ namespace OpenUtau.UI.Models
         double _offsetY = 0;
         double _quarterOffset = 0;
         double _minTickWidth = UIConstants.TrackTickMinWidth;
+        double _bpm = 120;
         int _beatPerBar = 4;
         int _beatUnit = 4;
 
@@ -88,7 +89,7 @@ namespace OpenUtau.UI.Models
         public double SmallChangeY { get { return ViewportSizeY / 10; } }
         public double QuarterOffset { set { _quarterOffset = value; HorizontalPropertiesChanged(); } get { return _quarterOffset; } }
         public double MinTickWidth { set { _minTickWidth = value; HorizontalPropertiesChanged(); } get { return _minTickWidth; } }
-        public double BPM { get { return Project.BPM; } }
+        public double BPM { set { _bpm = value; BPMChanged(); } get { return Project.BPM; } }
         public int BeatPerBar { set { _beatPerBar = value; HorizontalPropertiesChanged(); } get { return _beatPerBar; } }
         public int BeatUnit { set { _beatUnit = value; HorizontalPropertiesChanged(); } get { return _beatUnit; } }
         public TimeSpan PlayPosTime { get { return TimeSpan.FromMilliseconds((int)Project.TickToMillisecond(playPosTick)); } }
@@ -114,9 +115,14 @@ namespace OpenUtau.UI.Models
             OnPropertyChanged("OffsetY");
             OnPropertyChanged("ViewportSizeY");
             OnPropertyChanged("SmallChangeY");
+            OnPropertyChanged("BPM");
             MarkUpdate();
         }
 
+        public void BPMChanged() {
+            OnPropertyChanged("BPM");
+            MarkUpdate();
+        }
         # endregion
         
         List<PartElement> PartElements = new List<PartElement>();

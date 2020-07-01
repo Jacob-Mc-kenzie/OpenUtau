@@ -12,7 +12,7 @@
                 <TreeViewItem x:Name="playbackItem" Header="{StaticResource prefs.audio.playback}" Margin="-12,0,0,0" Visibility="Collapsed"/>
                 <TreeViewItem x:Name="renderingItem" Header="{StaticResource prefs.audio.rendering}" Margin="-12,0,0,0"/>
             </TreeViewItem>
-            <TreeViewItem Header="{StaticResource prefs.appearance}" IsExpanded="True" Visibility="Collapsed">
+            <TreeViewItem Header="{StaticResource prefs.appearance}" IsExpanded="True">
                 <TreeViewItem x:Name="themesItem" Header="Themes" Margin="-12,0,0,0"/>
                 <TreeViewItem Header="Media" Margin="-12,0,0,0"/>
             </TreeViewItem>

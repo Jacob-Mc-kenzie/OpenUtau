@@ -181,6 +181,9 @@
     <Compile Include="UI\Dialogs\SingerViewDialog.xaml.cs">
       <DependentUpon>SingerViewDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Dialogs\TempoDialog.xaml.cs">
+      <DependentUpon>TempoDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -193,6 +196,14 @@
     <Compile Include="UI\Models\ProgressBarViewModel.cs" />
     <Compile Include="UI\Models\TracksViewModel.cs" />
     <Compile Include="UI\UIConstants.cs" />
+    <Page Include="UI\Colors\DarkTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Dialogs\TempoDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Strings.ja-JP.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
