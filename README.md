@@ -9,7 +9,7 @@ Current stage: Alpha
 
 ## How to Use
 
-Download the <a href="https://ci.appveyor.com/project/stakira/openutau/build/artifacts" target="_blank">Latest Build</a>.
+Download the <a href="https://github.com/VorgunTheBeta/OpenUtau/releases/" target="_blank">Latest Build</a>.
 You will need to provide your own sound libraries and your favourite resampler.
 Put resampler exe or dll under Resamplers folder. Open Preferences menu to select resampler.
 
