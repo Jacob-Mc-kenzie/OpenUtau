@@ -40,14 +40,23 @@ namespace OpenUtau.Core.Formats
 
             double bpm = projects.First().BPM;
             UProject project = new UProject() { BPM = bpm, Name = "Merged Project", Saved = false };
+            project.RegisterExpression(new IntExpression(null, "velocity", "VEL") { Data = 100, Min = 0, Max = 200 });
+            project.RegisterExpression(new IntExpression(null, "volume", "VOL") { Data = 100, Min = 0, Max = 200 });
+            project.RegisterExpression(new IntExpression(null, "gender", "GEN") { Data = 0, Min = -100, Max = 100 });
+            project.RegisterExpression(new IntExpression(null, "lowpass", "LPF") { Data = 0, Min = 0, Max = 100 });
+            project.RegisterExpression(new IntExpression(null, "highpass", "HPF") { Data = 0, Min = 0, Max = 100 });
+            project.RegisterExpression(new IntExpression(null, "accent", "ACC") { Data = 100, Min = 0, Max = 200 });
+            project.RegisterExpression(new IntExpression(null, "decay", "DEC") { Data = 0, Min = 0, Max = 100 });
             foreach (UProject p in projects)
             {
                 var _track = p.Tracks[0];
                 var _part = p.Parts[0];
+                var _singer = p.Singers[0];
                 _track.TrackNo = project.Tracks.Count;
                 _part.TrackNo = _track.TrackNo;
                 project.Tracks.Add(_track);
                 project.Parts.Add(_part);
+                project.Singers.Add(_singer);
             }
 
             if (project != null) DocManager.Inst.ExecuteCmd(new LoadProjectNotification(project));

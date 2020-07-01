@@ -499,6 +499,9 @@ namespace OpenUtau.UI
                 trackVM.DeselectAll();
                 DocManager.Inst.Redo();
             }
+            else if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S) {
+                CmdSaveFile();   
+            }
         }
 
         # region application commmands
@@ -646,7 +649,7 @@ namespace OpenUtau.UI
         {
             var w = new Dialogs.TempoDialog() { Owner = this };
             w.ShowDialog();
-            trackVM.BPM = DocManager.Inst.Project.BPM;
+            trackVM.BPM = DocManager.Inst.Project.BPM;   //need this for bpm to change once dialog is closed
             trackVM.MarkUpdate();
         }
 

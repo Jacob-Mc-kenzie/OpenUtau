@@ -24,8 +24,8 @@ namespace OpenUtau.Core.Formats
             public override object Deserialize(IDictionary<string, object> dictionary, Type type, JavaScriptSerializer serializer)
             {
                 UNote result = USTx.Project.CreateNote();
-                result.Lyric = dictionary["y"] as string;
-                result.NoteNum = Convert.ToInt32(dictionary["n"]);
+                result.Lyric = dictionary["lyric"] as string;
+                result.NoteNum = Convert.ToInt32(dictionary["noteNum"]);
                 result.PosTick = Convert.ToInt32(dictionary["pos"]);
                 result.DurTick = Convert.ToInt32(dictionary["dur"]);
                 result.PitchBend.SnapFirst = Convert.ToBoolean(dictionary["pitsnap"]);
@@ -81,8 +81,8 @@ namespace OpenUtau.Core.Formats
                 var _obj = obj as UNote;
                 if (_obj == null) return result;
 
-                result.Add("y", _obj.Lyric);
-                result.Add("n", _obj.NoteNum);
+                result.Add("lyric", _obj.Lyric);
+                result.Add("noteNum", _obj.NoteNum);
                 result.Add("pos", _obj.PosTick);
                 result.Add("dur", _obj.DurTick);
                 result.Add("pho", _obj.Phonemes);
