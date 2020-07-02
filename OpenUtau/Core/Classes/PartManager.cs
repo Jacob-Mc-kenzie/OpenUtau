@@ -181,10 +181,10 @@ namespace OpenUtau.Core
                     {
                         phoneme.Oto = singer.AliasMap[phoneme.PhonemeRemapped];
                         phoneme.PhonemeError = false;
-                        phoneme.Overlap = phoneme.Oto.Overlap;
-                        phoneme.Preutter = phoneme.Oto.Preutter;
+                        //phoneme.Overlap = phoneme.Oto.Overlap;
+                        //phoneme.Preutter = phoneme.Oto.Preutter;
                         int vel = (int)phoneme.Parent.Expressions["velocity"].Data;
-                        if (vel != 100)
+                        if (vel <= 100)
                         {
                             double stretchRatio = Math.Pow(2, 1.0 - (double)vel / 100);
                             phoneme.Overlap *= stretchRatio;

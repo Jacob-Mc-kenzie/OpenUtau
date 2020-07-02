@@ -62,17 +62,17 @@ namespace OpenUtau.UI
 
             CmdNewFile();
 
-            if (UpdateChecker.Check()) {
-                var menuItem = new MenuItem() {
-                    Header = (string)FindResource("menu.updateavail"),
-                    Foreground = ThemeManager.WhiteKeyNameBrushNormal,
-                };
-                menuItem.Click += (sender, e) => {
-                    System.Diagnostics.Process.Start("https://github.com/stakira/OpenUtau");
-                };
+            //if (UpdateChecker.Check()) {
+            //    var menuItem = new MenuItem() {
+            //        Header = (string)FindResource("menu.updateavail"),
+            //        Foreground = ThemeManager.WhiteKeyNameBrushNormal,
+            //    };
+            //    menuItem.Click += (sender, e) => {
+            //        System.Diagnostics.Process.Start("https://github.com/stakira/OpenUtau");
+            //    };
 
-                mainMenu.Items.Add(menuItem);
-            }
+            //    mainMenu.Items.Add(menuItem);
+            //}
         }
 
         void RenderLoop(object sender, EventArgs e)
