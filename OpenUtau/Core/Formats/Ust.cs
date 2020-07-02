@@ -210,7 +210,11 @@ namespace OpenUtau.Core.Formats
                 if (line.StartsWith("Envelope="))
                 {
                     var pts = line.Trim().Replace("Envelope=", string.Empty).Split(new[] { ',' });
-                    if (pts.Count() > 5) note.Expressions["decay"].Data = 100 - (int)double.Parse(pts[5]);
+                    if (pts.Count() > 5) {
+                        note.Expressions["decay"].Data = 100 - (int)double.Parse(pts[2]);
+                        note.Expressions["accent"].Data = 100 - (int)double.Parse(pts[1]);
+                    }
+
                 }
                 if (line.StartsWith("VBR=")) VibratoFromUst(note.Vibrato, line.Trim().Replace("VBR=", string.Empty));
                 if (line.StartsWith("PBS=")) pbs = line.Trim().Replace("PBS=", string.Empty);

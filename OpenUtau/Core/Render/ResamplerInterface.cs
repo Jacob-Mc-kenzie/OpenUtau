@@ -33,7 +33,12 @@ namespace OpenUtau.Core.Render {
             var part = args.Item1;
             var project = args.Item2;
             var engine = args.Item3;
-            e.Result = RenderAsync(part, project, engine, sender as BackgroundWorker);
+            try {
+                e.Result = RenderAsync(part, project, engine, sender as BackgroundWorker);
+            }
+            catch (Exception ex) {
+                Log.Error(ex, "Couldn't finish rendering");
+            }
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -75,7 +80,7 @@ namespace OpenUtau.Core.Render {
 
                         var item = new RenderItem(phoneme, part, project);
 
-                        // System.Diagnostics.Debug.WriteLine("Sound {0:x} resampling {1}", item.HashParameters(), item.GetResamplerExeArgs());
+                        //System.Diagnostics.Debug.WriteLine("Sound {0:x} resampling {1}", item.HashParameters(), item.GetResamplerExeArgs());
                         var engineArgs = DriverModels.CreateInputModel(item, 0);
                         var output = engine.DoResampler(engineArgs);
                         item.Sound = MemorySampleProvider.FromStream(output);
