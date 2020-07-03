@@ -17,7 +17,6 @@ Current stage: Early Alpha
 ## Other
 
 - No proper error when it can't render
-- End envelopes become square
 - Some pitch bends behave VERY weird
 
 
