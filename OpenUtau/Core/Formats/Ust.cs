@@ -205,13 +205,16 @@ namespace OpenUtau.Core.Formats
                 if (line.StartsWith("PreUtterance="))
                 {
                     if (line.Trim() == "PreUtterance=") note.Phonemes[0].AutoEnvelope = true;
-                    else { note.Phonemes[0].AutoEnvelope = false; note.Phonemes[0].Preutter = double.Parse(line.Trim().Replace("PreUtterance=", string.Empty)); Log.Warning(note.Phonemes[0].Preutter.ToString()); }
+                    else { note.Phonemes[0].AutoEnvelope = false; note.Phonemes[0].Preutter = double.Parse(line.Trim().Replace("PreUtterance=", string.Empty)); }
                 }
                 if (line.StartsWith("VoiceOverlap=")) note.Phonemes[0].Overlap = double.Parse(line.Trim().Replace("VoiceOverlap=", string.Empty));
                 if (line.StartsWith("Envelope="))
                 {
+                    //Envelope=0,37.3,35,0,100,100,0
+                    var pts = line.Trim().Replace("Envelope=", string.Empty).Split(new[] { ',' });
+                    note.Expressions["decay"].Data = (int)double.Parse(pts[5]);
                     
-                    
+                    #region Envelope Vals
                     //arraycnt = 0,1, 2,3,  4,  5,  6,7, 8, 9, 10
                     //env long = 0,5,20,0,100,100,100,%,15,10,100
                     //0 = {0,0}
@@ -219,62 +222,62 @@ namespace OpenUtau.Core.Formats
                     //3 = { 20,100}
                     //4 = { 15,100}
                     //2 = { 10,100}
-                    var pts = line.Trim().Replace("Envelope=", string.Empty).Split(new[] { ',' });
-                    if (pts.Contains("%")){
-                        if (pts.Count() == 11) {
-                            //note.Expressions["decay"].Data = (int)double.Parse(pts[2]);
-                            //note.Expressions["accent"].Data = (int)double.Parse(pts[1]);
-                            note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0])- note.Phonemes[0].Preutter;
-                            note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
-                            note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
-                            note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
-                            note.Phonemes[0].Envelope.Points[2].X = double.Parse(pts[9]);
-                            note.Phonemes[0].Envelope.Points[2].Y = double.Parse(pts[10]);
-                            note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
-                            note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
-                            note.Phonemes[0].Envelope.Points[4].X = double.Parse(pts[8]);
-                            note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
-                        } else if (pts.Count()==9){
-                            //note.Expressions["decay"].Data = (int)double.Parse(pts[2]);
-                            //note.Expressions["accent"].Data = (int)double.Parse(pts[1]);
-                            note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
-                            note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
-                            note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
-                            note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
-                            note.Phonemes[0].Envelope.Points[2].X = 0;
-                            note.Phonemes[0].Envelope.Points[2].Y = 100;
-                            note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
-                            note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
-                            note.Phonemes[0].Envelope.Points[4].X = double.Parse(pts[8]);
-                            note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
-                        } else {
-                            note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
-                            note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
-                            note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
-                            note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
-                            note.Phonemes[0].Envelope.Points[2].X = 0;
-                            note.Phonemes[0].Envelope.Points[2].Y = 100;
-                            note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
-                            note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
-                            note.Phonemes[0].Envelope.Points[4].X = 0;
-                            note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
-                        }
-                    } //Envelope=0,37.3,35,0,100,100,0
-                        //Order   =p1,p2,p3,v1,v2,v3,v4
-                        //Envpoints=1x,2x,3x,1y,2y,3y,4y
-                        else {
-                        note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
-                        note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
-                        note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
-                        note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
-                        note.Phonemes[0].Envelope.Points[2].X = 0;
-                        note.Phonemes[0].Envelope.Points[2].Y = 100;
-                        note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
-                        note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
-                        note.Phonemes[0].Envelope.Points[4].X = 0;
-                        note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
-                    }
+
+                    //if (pts.Contains("%")) {
+                    //    if (pts.Count() == 11) {
+                    //        note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
+                    //        note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
+                    //        note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
+                    //        note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
+                    //        note.Phonemes[0].Envelope.Points[2].X = double.Parse(pts[9]);
+                    //        note.Phonemes[0].Envelope.Points[2].Y = double.Parse(pts[10]);
+                    //        note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
+                    //        note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
+                    //        note.Phonemes[0].Envelope.Points[4].X = double.Parse(pts[8]);
+                    //        note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
+                    //    } else if (pts.Count() == 9) {
+                    //        //note.Expressions["decay"].Data = (int)double.Parse(pts[2]);
+                    //        //note.Expressions["accent"].Data = (int)double.Parse(pts[1]);
+                    //        note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
+                    //        note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
+                    //        note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
+                    //        note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
+                    //        note.Phonemes[0].Envelope.Points[2].X = 0;
+                    //        note.Phonemes[0].Envelope.Points[2].Y = 100;
+                    //        note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
+                    //        note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
+                    //        note.Phonemes[0].Envelope.Points[4].X = double.Parse(pts[8]);
+                    //        note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
+                    //    } else {
+                    //        note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
+                    //        note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
+                    //        note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
+                    //        note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
+                    //        note.Phonemes[0].Envelope.Points[2].X = 0;
+                    //        note.Phonemes[0].Envelope.Points[2].Y = 100;
+                    //        note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
+                    //        note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
+                    //        note.Phonemes[0].Envelope.Points[4].X = 0;
+                    //        note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
+                    //    }
+                    //}
+                    //    //Order   =p1,p2,p3,v1,v2,v3,v4
+                    //    //Envpoints=1x,2x,3x,1y,2y,3y,4y
+                    //    else {
+                    //    note.Phonemes[0].Envelope.Points[0].X = double.Parse(pts[0]) - note.Phonemes[0].Preutter;
+                    //    note.Phonemes[0].Envelope.Points[0].Y = double.Parse(pts[3]);
+                    //    note.Phonemes[0].Envelope.Points[1].X = double.Parse(pts[1]);
+                    //    note.Phonemes[0].Envelope.Points[1].Y = double.Parse(pts[4]);
+                    //    note.Phonemes[0].Envelope.Points[2].X = 0;
+                    //    note.Phonemes[0].Envelope.Points[2].Y = 100;
+                    //    note.Phonemes[0].Envelope.Points[3].X = double.Parse(pts[2]);
+                    //    note.Phonemes[0].Envelope.Points[3].Y = double.Parse(pts[5]);
+                    //    note.Phonemes[0].Envelope.Points[4].X = 0;
+                    //    note.Phonemes[0].Envelope.Points[4].Y = double.Parse(pts[6]);
+                    //}
+                    #endregion
                 }
+                if (line.StartsWith("StartPoint=")) note.Expressions["accent"].Data = (int)double.Parse(line.Trim().Replace("StartPoint=",string.Empty))/100;
                 if (line.StartsWith("VBR=")) VibratoFromUst(note.Vibrato, line.Trim().Replace("VBR=", string.Empty));
                 if (line.StartsWith("PBS=")) pbs = line.Trim().Replace("PBS=", string.Empty);
                 if (line.StartsWith("PBW=")) pbw = line.Trim().Replace("PBW=", string.Empty);

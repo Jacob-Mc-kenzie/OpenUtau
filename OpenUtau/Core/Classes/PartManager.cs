@@ -45,6 +45,7 @@ namespace OpenUtau.Core
                 UpdatePhonemeOto(part);
                 UpdateOverlapAdjustment(part);
                 UpdateEnvelope(part);
+                
                 UpdatePitchBend(part);
                 DocManager.Inst.ExecuteCmd(new RedrawNotesNotification(), true);
             }
@@ -87,6 +88,22 @@ namespace OpenUtau.Core
             {
                 foreach (UPhoneme phoneme in note.Phonemes)
                 {
+                    #region Attempted fix
+                    //phoneme.Envelope.Points[0].X = -phoneme.Preutter;
+                    //phoneme.Envelope.Points[1].X = -(int)phoneme.Parent.Expressions["accent"].Data + (phoneme.Overlapped ? phoneme.Overlap : 5);
+                    ////phoneme.Envelope.Points[2].X = Math.Max(0, (int)phoneme.Envelope.Points[1].X);
+                    //phoneme.Envelope.Points[3].X = DocManager.Inst.Project.TickToMillisecond(phoneme.DurTick) - phoneme.TailIntrude;
+                    //phoneme.Envelope.Points[4].X = phoneme.Envelope.Points[3].X + phoneme.TailOverlap;
+
+                    //phoneme.Envelope.Points[1].Y = (int)phoneme.Parent.Expressions["volume"].Data;
+                    ////phoneme.Envelope.Points[1].X = -(int)phoneme.Parent.Expressions["accent"].Data + (phoneme.Overlapped ? phoneme.Overlap : 5) / 100.0;
+                    ////phoneme.Envelope.Points[1].Y = (int)phoneme.Parent.Expressions["accent"].Data * (int)phoneme.Parent.Expressions["volume"].Data / 100;
+                    //phoneme.Envelope.Points[1].Y = (int)phoneme.Parent.Expressions["volume"].Data;
+                    //phoneme.Envelope.Points[2].Y = (int)phoneme.Parent.Expressions["volume"].Data;
+                    //phoneme.Envelope.Points[3].Y = (int)phoneme.Parent.Expressions["volume"].Data;
+                    //phoneme.Envelope.Points[3].X = (phoneme.Envelope.Points[3].X - phoneme.Envelope.Points[2].X) * Convert.ToDouble(phoneme.Parent.Expressions["decay"].Data) / 100;
+                    ////phoneme.Envelope.Points[3].Y *= 1.0 - (int)phoneme.Parent.Expressions["decay"].Data / 100.0;
+                    #endregion
                     phoneme.Envelope.Points[0].X = -phoneme.Preutter;
                     phoneme.Envelope.Points[1].X = phoneme.Envelope.Points[0].X + (phoneme.Overlapped ? phoneme.Overlap : 5);
                     phoneme.Envelope.Points[2].X = Math.Max(0, phoneme.Envelope.Points[1].X);
@@ -95,11 +112,11 @@ namespace OpenUtau.Core
 
                     phoneme.Envelope.Points[1].Y = (int)phoneme.Parent.Expressions["volume"].Data;
                     phoneme.Envelope.Points[1].X = phoneme.Envelope.Points[0].X + (phoneme.Overlapped ? phoneme.Overlap : 5) * (int)phoneme.Parent.Expressions["accent"].Data / 100.0;
-                    phoneme.Envelope.Points[1].Y = (int)phoneme.Parent.Expressions["accent"].Data * (int)phoneme.Parent.Expressions["volume"].Data / 100;
+                    phoneme.Envelope.Points[1].Y = /*(int)phoneme.Parent.Expressions["accent"].Data */ (int)phoneme.Parent.Expressions["volume"].Data / 100;
                     phoneme.Envelope.Points[2].Y = (int)phoneme.Parent.Expressions["volume"].Data;
                     phoneme.Envelope.Points[3].Y = (int)phoneme.Parent.Expressions["volume"].Data;
-                    phoneme.Envelope.Points[3].X -= (phoneme.Envelope.Points[3].X - phoneme.Envelope.Points[2].X) * (int)phoneme.Parent.Expressions["decay"].Data / 500;
-                    phoneme.Envelope.Points[3].Y *= 1.0 - (int)phoneme.Parent.Expressions["decay"].Data / 100.0;
+                    phoneme.Envelope.Points[3].X -= (phoneme.Envelope.Points[3].X - phoneme.Envelope.Points[2].X) * (int)phoneme.Parent.Expressions["decay"].Data / 250;
+                    //phoneme.Envelope.Points[3].Y *= 1.0 - (int)phoneme.Parent.Expressions["decay"].Data / 100.0;
                 }
             }
         }
@@ -181,11 +198,11 @@ namespace OpenUtau.Core
                     {
                         phoneme.Oto = singer.AliasMap[phoneme.PhonemeRemapped];
                         phoneme.PhonemeError = false;
-                        //phoneme.Overlap = phoneme.Oto.Overlap;
-                        //phoneme.Preutter = phoneme.Oto.Preutter;
+                        if (phoneme.Overlap < 0) phoneme.Overlap = -phoneme.Overlap;
+                        phoneme.Overlap = Math.Max(phoneme.Overlap,phoneme.Oto.Overlap);
+                        phoneme.Preutter = Math.Max(phoneme.Preutter,phoneme.Oto.Preutter);
                         int vel = (int)phoneme.Parent.Expressions["velocity"].Data;
-                        if (vel <= 100)
-                        {
+                        if (vel != 100) {
                             double stretchRatio = Math.Pow(2, 1.0 - (double)vel / 100);
                             phoneme.Overlap *= stretchRatio;
                             phoneme.Preutter *= stretchRatio;
