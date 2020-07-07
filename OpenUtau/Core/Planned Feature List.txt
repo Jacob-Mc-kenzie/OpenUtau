@@ -1,0 +1,15 @@
+﻿CV to VCV
+Vibrato Menu
+Better Snapping
+More Themes
+SynthV Support
+Better exporting
+Better logging/error handeling
+Track/part (re)naming
+VB Management/installing
+Audio panning     *
+Mute/solo tracks !
+Save track settings
+Proper note selection
+Partial rendering
+Clear playback on load

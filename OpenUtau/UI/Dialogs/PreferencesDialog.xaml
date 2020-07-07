@@ -32,9 +32,9 @@
         </Grid>
         <Grid x:Name="themesGrid" Margin="170,2,10,10" Visibility="Collapsed">
             <TextBlock Text="Theme" Margin="10,4,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-            <ComboBox Width="256" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,25,0,0">
-                <ComboBoxItem Content="Clean" IsSelected="True"/>
-                <ComboBoxItem Content="Dark"/>
+            <ComboBox x:Name="themeCombo" Width="256" Height="22" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,25,0,0" SelectionChanged="ThemeCombo_SelectionChanged">
+                <ComboBoxItem Content="Dark" IsSelected="True"/>
+                <ComboBoxItem Content="Light"/>
             </ComboBox>
         </Grid>
         <Grid x:Name="playbackGrid" Margin="170,2,10,10" Visibility="Collapsed">

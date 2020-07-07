@@ -57,8 +57,11 @@ namespace OpenUtau.Core
         private void StartPlayback()
         {
             masterMix = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
-            foreach (var source in trackSources)
-                masterMix.AddMixerInput(source);
+            foreach (var source in trackSources) {
+                
+                    masterMix.AddMixerInput(source);
+                
+            }
             outDevice = new WaveOut();
             outDevice.Init(masterMix);
             outDevice.Play();
@@ -106,7 +109,7 @@ namespace OpenUtau.Core
             trackSources = new List<TrackSampleProvider>();
             foreach (UTrack track in project.Tracks)
             {
-                trackSources.Add(new TrackSampleProvider() { Volume = DecibelToVolume(track.Volume) });
+                trackSources.Add(new TrackSampleProvider() { Volume = DecibelToVolume(track.Volume), Pan = track.Pan });
             }
             pendingParts = project.Parts.Count;
             foreach (UPart part in project.Parts)
@@ -174,20 +177,52 @@ namespace OpenUtau.Core
 
         public void OnNext(UCommand cmd, bool isUndo)
         {
-            if (cmd is SeekPlayPosTickNotification)
-            {
+            if (cmd is SeekPlayPosTickNotification) {
                 StopPlayback();
                 int tick = ((SeekPlayPosTickNotification)cmd).playPosTick;
                 DocManager.Inst.ExecuteCmd(new SetPlayPosTickNotification(tick));
-            }
-            else if (cmd is VolumeChangeNotification)
-            {
+            } 
+            else if (cmd is VolumeChangeNotification) {
                 var _cmd = cmd as VolumeChangeNotification;
-                if (trackSources != null && trackSources.Count > _cmd.TrackNo)
-                {
+                if (trackSources != null && trackSources.Count > _cmd.TrackNo) {
                     trackSources[_cmd.TrackNo].Volume = DecibelToVolume(_cmd.Volume);
                 }
+            } 
+            else if (cmd is TrackMuteNotification) {
+                var _cmd = cmd as TrackMuteNotification;
+                if (trackSources != null && trackSources.Count > _cmd.TrackNo && _cmd.Toggle) {
+                    trackSources[_cmd.TrackNo].Volume = 0f;
+                } else if (trackSources != null && trackSources.Count > _cmd.TrackNo && !_cmd.Toggle) {
+                    trackSources[_cmd.TrackNo].Volume = DecibelToVolume(_cmd.Volume);
+                }
+            } 
+            else if (cmd is TrackSoloNotification) {
+                var _cmd = cmd as TrackSoloNotification;
+                if (trackSources != null && trackSources.Count > _cmd.TrackNo && _cmd.Toggle) {
+                    for (int i = 0; i < trackSources.Count; i++) {
+                        if (i == _cmd.TrackNo) {
+                            continue;
+                        } else {
+                            DocManager.Inst.ExecuteCmd(new TrackMuteNotification(i, true, DocManager.Inst.Project.Tracks[i].Volume));
+                        }
+                    }
+                } else if (trackSources != null && trackSources.Count > _cmd.TrackNo && !_cmd.Toggle) {
+                    for (int i = 0; i < trackSources.Count; i++) {
+                        if (i == _cmd.TrackNo) {
+                            continue;
+                        } else {
+                            DocManager.Inst.ExecuteCmd(new TrackMuteNotification(i, false, DocManager.Inst.Project.Tracks[i].Volume));
+                        }
+                    }
+                }
             }
+            else if (cmd is PanChangeNotification) {
+                var _cmd = cmd as PanChangeNotification;
+                if(trackSources != null && trackSources.Count > _cmd.TrackNo) {
+                    trackSources[_cmd.TrackNo].Pan = _cmd.Pan;
+                }
+            }
+            
         }
 
         # endregion

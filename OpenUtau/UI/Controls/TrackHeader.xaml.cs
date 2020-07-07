@@ -148,5 +148,20 @@ namespace OpenUtau.UI.Controls
         {
             DocManager.Inst.ExecuteCmd(new VolumeChangeNotification(this.Track.TrackNo, ((Slider)sender).Value));
         }
+
+
+        private void MuteButton_Clicked(object sender, RoutedEventArgs e) {
+            DocManager.Inst.ExecuteCmd(new TrackMuteNotification(this.Track.TrackNo, (bool)((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked,this.Track.Volume));
+            Track.Mute = (bool)((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked;
+        }
+
+        private void soloButton_Click(object sender, RoutedEventArgs e) {
+            DocManager.Inst.ExecuteCmd(new TrackSoloNotification(Track.TrackNo, (bool)((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked));
+            Track.Solo = (bool)((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked;
+        }
+
+        private void PanSlider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            DocManager.Inst.ExecuteCmd(new PanChangeNotification(Track.TrackNo, (float)((Slider)sender).Value));
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace OpenUtau.Core.USTx
         public bool Mute { set; get; }
         public bool Solo { set; get; }
         public double Volume { set; get; }
-        public double Pan { set; get; }
+        public float Pan { set; get; }
 
         public UTrack() { }
     }

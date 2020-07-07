@@ -106,4 +106,43 @@ namespace OpenUtau.Core
         public VolumeChangeNotification(int trackNo, double volume) { this.TrackNo = trackNo; this.Volume = volume; }
         public override string ToString() { return $"Set track {TrackNo} volume to {Volume}"; }
     }
+
+    public class TrackMuteNotification : UNotification 
+    {
+        public int TrackNo;
+        public bool Toggle;
+        public double Volume;
+        public TrackMuteNotification(int trackNo,bool toggle,double volume) { TrackNo = trackNo; Toggle = toggle; Volume = volume; }
+        public override string ToString() {
+            return $"Set track {TrackNo} mute to {Toggle}";
+        }
+    }
+
+    public class TrackSoloNotification : UNotification 
+    {
+        public int TrackNo;
+        public bool Toggle;
+        public TrackSoloNotification(int trackNo, bool toggle) 
+        {
+            TrackNo = trackNo;
+            Toggle = toggle;
+        }
+        public override string ToString() {
+            return $"Set track {TrackNo} solo to {Toggle}";
+        }
+    }
+
+    public class PanChangeNotification : UNotification 
+    {
+        public float Pan;
+        public int TrackNo;
+        public PanChangeNotification(int trackNo, float pan) 
+        {
+            TrackNo = trackNo;
+            Pan = pan;
+        }
+        public override string ToString() {
+            return $"Set track{TrackNo} pan to {Pan}";
+        }
+    }
 }

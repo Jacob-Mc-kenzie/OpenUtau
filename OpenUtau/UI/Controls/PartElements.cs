@@ -305,12 +305,12 @@ namespace OpenUtau.UI.Controls
                                 partBitmap,
                                 x, (int)(stereoChnlAmp * (1 + lmin)) + 2,
                                 x, (int)(stereoChnlAmp * (1 + lmax)) + 2,
-                                Colors.White);
+                                Color.FromRgb(255, 255, 255));
                             WriteableBitmapExtensions.DrawLine(
                                 partBitmap,
                                 x, (int)(stereoChnlAmp * (1 + rmin) + monoChnlAmp) + 3,
                                 x, (int)(stereoChnlAmp * (1 + rmax) + monoChnlAmp) + 3,
-                                Colors.White);
+                                Color.FromRgb(255,255,255));
                         }
                         else
                         {
@@ -318,7 +318,7 @@ namespace OpenUtau.UI.Controls
                                 partBitmap,
                                 x, (int)(monoChnlAmp * (1 + lmin)) + 2,
                                 x, (int)(monoChnlAmp * (1 + lmax)) + 2,
-                                Colors.White);
+                                Color.FromRgb(255, 255, 255));
                         }
                         lmax = lmin = rmax = rmin = 0;
                         position += samplesPerPixel;
@@ -337,7 +337,7 @@ namespace OpenUtau.UI.Controls
                 partBitmap.FillRectangle(
                     1 + (int)this.X, (int)(_height - 2),
                     17 + (int)this.X, (int)((_height - 4) * (1 - e.ProgressPercentage / 100.0)) + 2,
-                    Colors.White);
+                    Color.FromRgb(255, 255, 255));
             }
         }
 

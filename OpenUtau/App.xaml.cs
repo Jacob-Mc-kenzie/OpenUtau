@@ -8,16 +8,15 @@ using System.Windows;
 using Serilog;
 
 namespace OpenUtau {
-
+    public enum Skin { Light, Dark }
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
-
+        public static Skin Skin { get; set; } = Skin.Dark;
         private App() {
             InitializeComponent();
-            SelectCulture(CultureInfo.InstalledUICulture.Name);
-            UI.ThemeManager.LoadTheme();
+            ChangeSkin(Skin.Dark);
         }
 
         public static void SelectCulture(string culture) {
@@ -57,6 +56,41 @@ namespace OpenUtau {
             }
             var window = new UI.MainWindow();
             app.Run(window);
+        }
+
+        public void ChangeSkin(Skin newSkin) 
+        {
+            Skin = newSkin;
+            Resources.Clear();
+            Resources.MergedDictionaries.Clear();
+            if (Skin == Skin.Dark) {
+                ApplyResources("UI\\Colors\\DarkTheme.xaml");
+            }
+            else if (Skin == Skin.Light) {
+                ApplyResources("UI\\Colors\\LightTheme.xaml");
+            }
+            ApplyResources("UI\\Styles\\Button.xaml");
+            ApplyResources("UI\\Styles\\ScrollBar.xaml");
+            ApplyResources("UI\\Styles\\Menu.xaml");
+            ApplyResources("UI\\Styles\\BorderlessWindow.xaml");
+            ApplyResources("UI\\Styles\\ComboBox.xaml");
+            ApplyResources("UI\\Styles\\TrackHeaderStyles.xaml");
+            ApplyResources("UI\\Styles\\ProgressBar.xaml");
+            ApplyResources("UI\\Strings.zh-CN.xaml");
+            ApplyResources("UI\\Strings.ja-JP.xaml");
+            ApplyResources("UI\\Strings.xaml");
+            SelectCulture(CultureInfo.InstalledUICulture.Name);
+            UI.ThemeManager.LoadTheme();
+        }
+        private void ApplyResources(string src) {
+            var dict = new ResourceDictionary() { Source = new Uri(src, UriKind.Relative) };
+            foreach (var mergeDict in dict.MergedDictionaries) {
+                Resources.MergedDictionaries.Add(mergeDict);
+            }
+
+            foreach (var key in dict.Keys) {
+                Resources[key] = dict[key];
+            }
         }
     }
 }

@@ -167,6 +167,7 @@
     <Compile Include="Core\Util\PathManager.cs" />
     <Compile Include="Core\Util\Preferences.cs" />
     <Compile Include="Core\Util\UpdateChecker.cs" />
+    <Compile Include="UI\Colors\SkinResourceDictionary.cs" />
     <Compile Include="UI\Controls\ExpComboBox.xaml.cs">
       <DependentUpon>ExpComboBox.xaml</DependentUpon>
     </Compile>
@@ -333,7 +334,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="OpenUtau_TemporaryKey.pfx" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -366,6 +369,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="BRUHhh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Core\Planned Feature List.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

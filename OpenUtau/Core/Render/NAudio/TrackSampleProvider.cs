@@ -14,6 +14,7 @@ namespace OpenUtau.Core.Render
         private PanningSampleProvider pan;
         private VolumeSampleProvider volume;
         private MixingSampleProvider mix;
+        
 
         /// <summary>
         /// Pan. -1f (left) to 1f (right).
@@ -28,8 +29,8 @@ namespace OpenUtau.Core.Render
         public TrackSampleProvider()
         {
             mix = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
-            //pan = new PanningSampleProvider(mix);
-            volume = new VolumeSampleProvider(mix);
+            pan = new PanningSampleProvider(mix.ToMono());
+            volume = new VolumeSampleProvider(pan);
         }
 
         public int Read(float[] buffer, int offset, int count)

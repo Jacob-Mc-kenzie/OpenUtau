@@ -119,7 +119,9 @@ namespace OpenUtau.Core.Formats
                         if (currentLines.Count != 0)
                         {
                             currentNote = NoteFromUst(project.CreateNote(), currentLines, version);
+                            Log.Warning(currentNote.ToString());
                             currentNote.PosTick = currentTick;
+                            Log.Warning(currentNote.PosTick.ToString());
                             if (!currentNote.Lyric.Replace("R", string.Empty).Replace("r", string.Empty).Equals(string.Empty)) part.Notes.Add(currentNote);
                             currentTick += currentNote.DurTick;
                             currentLines.Clear();
@@ -198,21 +200,41 @@ namespace OpenUtau.Core.Formats
                         note.Phonemes[0].AutoRemapped = false;
                     }
                 }
-                if (line.StartsWith("Length=")) note.DurTick = int.Parse(line.Trim().Replace("Length=", string.Empty));
-                if (line.StartsWith("NoteNum=")) note.NoteNum = int.Parse(line.Trim().Replace("NoteNum=", string.Empty));
-                if (line.StartsWith("Velocity=")) note.Expressions["velocity"].Data = int.Parse(line.Trim().Replace("Velocity=", string.Empty));
-                if (line.StartsWith("Intensity=")) note.Expressions["volume"].Data = int.Parse(line.Trim().Replace("Intensity=", string.Empty));
+                if (line.StartsWith("Length=")) {
+                    note.DurTick = int.Parse(line.Trim().Replace("Length=", string.Empty));
+                }
+                if (line.StartsWith("NoteNum=")) {
+                    note.NoteNum = int.Parse(line.Trim().Replace("NoteNum=", string.Empty));
+                }
+                if (line.StartsWith("Velocity=")) {
+                    note.Expressions["velocity"].Data = int.Parse(line.Trim().Replace("Velocity=", string.Empty));
+                }
+                if (line.StartsWith("Intensity=")) {
+                    note.Expressions["volume"].Data = int.Parse(line.Trim().Replace("Intensity=", string.Empty));
+                }
                 if (line.StartsWith("PreUtterance="))
                 {
-                    if (line.Trim() == "PreUtterance=") note.Phonemes[0].AutoEnvelope = true;
-                    else { note.Phonemes[0].AutoEnvelope = false; note.Phonemes[0].Preutter = double.Parse(line.Trim().Replace("PreUtterance=", string.Empty)); }
+                    if (line.Trim() == "PreUtterance=") {
+                        note.Phonemes[0].AutoEnvelope = true;
+                    }
+                    else {
+                        note.Phonemes[0].AutoEnvelope = false;
+                        note.Phonemes[0].Preutter = double.Parse(line.Trim().Replace("PreUtterance=", string.Empty));
+                    }
                 }
-                if (line.StartsWith("VoiceOverlap=")) note.Phonemes[0].Overlap = double.Parse(line.Trim().Replace("VoiceOverlap=", string.Empty));
+                if (line.StartsWith("VoiceOverlap=")) {
+                    if (line.Trim() == "VoiceOverlap=") {
+                        note.Phonemes[0].Overlap = 0;
+                    } else {
+                        note.Phonemes[0].Overlap = double.Parse(line.Trim().Replace("VoiceOverlap=", string.Empty));
+                    }
+                } 
                 if (line.StartsWith("Envelope="))
                 {
                     //Envelope=0,37.3,35,0,100,100,0
                     var pts = line.Trim().Replace("Envelope=", string.Empty).Split(new[] { ',' });
                     note.Expressions["decay"].Data = (int)double.Parse(pts[5]);
+                    //note.Expressions["accent"].Data = (int)double.Parse(pts[0]);
                     
                     #region Envelope Vals
                     //arraycnt = 0,1, 2,3,  4,  5,  6,7, 8, 9, 10
@@ -277,7 +299,10 @@ namespace OpenUtau.Core.Formats
                     //}
                     #endregion
                 }
-                if (line.StartsWith("StartPoint=")) note.Expressions["accent"].Data = (int)double.Parse(line.Trim().Replace("StartPoint=",string.Empty))/100;
+                if (line.StartsWith("StartPoint=")) {
+                    note.Expressions["accent"].Data = (int)double.Parse(line.Trim().Replace("StartPoint=", string.Empty));
+                }
+
                 if (line.StartsWith("VBR=")) VibratoFromUst(note.Vibrato, line.Trim().Replace("VBR=", string.Empty));
                 if (line.StartsWith("PBS=")) pbs = line.Trim().Replace("PBS=", string.Empty);
                 if (line.StartsWith("PBW=")) pbw = line.Trim().Replace("PBW=", string.Empty);
@@ -309,7 +334,19 @@ namespace OpenUtau.Core.Formats
                     for (int i = 0; i < w.Count() - 1; i++)
                     {
                         x += string.IsNullOrEmpty(w[i]) ? 0 : float.Parse(w[i]);
-                        pts.Add(new PitchPoint(x, string.IsNullOrEmpty(y[i]) ? 0 : double.Parse(y[i])));
+                        if (y.Count() > 1) {
+                            if (y.Count() < w.Count()) {
+                                if(i >= y.Count()) {
+                                    pts.Add(new PitchPoint(x, string.IsNullOrEmpty(y[y.Count()-1]) ? 0 : double.Parse(y[y.Count() - 1])));
+                                } else {
+                                    pts.Add(new PitchPoint(x, string.IsNullOrEmpty(y[i]) ? 0 : double.Parse(y[i])));
+                                }
+                            } else {
+                                pts.Add(new PitchPoint(x, string.IsNullOrEmpty(y[i]) ? 0 : double.Parse(y[i])));
+                            }
+                        } else {
+                            pts.Add(new PitchPoint(x, string.IsNullOrEmpty(y[0]) ? 0 : double.Parse(y[0])));
+                        }
                     }
                     pts.Add(new PitchPoint(x + double.Parse(w[w.Count() - 1]), 0));
                 }
@@ -324,6 +361,7 @@ namespace OpenUtau.Core.Formats
                     }
                 }
             }
+            Log.Warning(note.ToString());
             return note;
         }
 

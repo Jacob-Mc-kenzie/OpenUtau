@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-
+using Serilog;
 using OpenUtau.Core;
+using OpenUtau.UI;
+
 
 namespace OpenUtau.UI.Dialogs {
 
@@ -16,6 +18,7 @@ namespace OpenUtau.UI.Dialogs {
         private List<string> singerPaths;
 
         private List<string> engines;
+
 
         public PreferencesDialog() {
             InitializeComponent();
@@ -114,6 +117,25 @@ namespace OpenUtau.UI.Dialogs {
             Core.Util.Preferences.Save();
         }
 
-        # endregion
+        #endregion
+
+        #region Theme Selection
+        private void UpdateThemes() {
+
+        }
+        
+
+        private void ThemeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            switch (themeCombo.SelectedIndex) {
+                case 0:
+                    (App.Current as App).ChangeSkin(Skin.Dark);
+                    break;
+                case 1:
+                    (App.Current as App).ChangeSkin(Skin.Light);
+                    break;
+
+            }
+        }
+        #endregion
     }
 }

@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("OpenUtau")]
-[assembly: AssemblyCopyright("Copyright © 2019 Sugita Akira")]
+[assembly: AssemblyCopyright("Copyright © 2019 Sugita Akira-2020 VorgunTheBeta")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -52,4 +52,4 @@ using System.Windows;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.0.0")]
-[assembly: AssemblyFileVersion("0.0.1")]
+[assembly: AssemblyFileVersion("0.0.3")]
