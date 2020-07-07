@@ -8,10 +8,10 @@ Current stage: Early Alpha
 # Known Bugs
 ## Crashes
 
-- Opening UST files
 - Trying to import audio with a different bitrate than normal
 - Making a new project
 - Rendering audio
+- Trying to set the vocals for a track
 - Probably more I havent found yet
 
 ## Other
