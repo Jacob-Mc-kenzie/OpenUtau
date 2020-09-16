@@ -6,6 +6,8 @@ SynthV Support
 Better exporting
 Better logging/error handeling
 Track/part (re)naming
+Track number correction
+Multiple VB rendering
 VB Management/installing
 Audio panning     *
 Mute/solo tracks !
